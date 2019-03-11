@@ -22,3 +22,5 @@ for image in images:
     ret = object.put(Body=file,
                     Metadata={'FullName':image[1]}
                     )
+
+def uploadFace

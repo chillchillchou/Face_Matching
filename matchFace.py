@@ -1,5 +1,6 @@
 from __future__ import print_function
-
+import numpy as np
+import cv2
 import boto3
 import io
 from PIL import Image
@@ -7,6 +8,7 @@ from pprint import pprint
 
 rekognition = boto3.client('rekognition', region_name='us-east-1')
 dynamodb = boto3.client('dynamodb', region_name='us-east-1')
+
 
 image = Image.open("source.jpg")
 stream = io.BytesIO()
@@ -44,22 +46,23 @@ for face in all_faces:
             CollectionId='itpFaces',
             Image={'Bytes':image_crop_binary}
             )
+    pprint(response["FaceMatches"][0]["Face"]["ExternalImageId"])
     # pprint(response)
 
-    if len(response['FaceMatches']) > 0:
-        # Return results
-        # print ('Coordinates ', box)
-        for match in response['FaceMatches']:
-
-            face = dynamodb.get_item(
-                TableName='face_collection',
-                Key={'RekognitionId': {'S': match['Face']['FaceId']}}
-                )
-            pprint(face)
-            if 'Item' in face:
-                # pprint(person)
-                person = face['Item']['FullName']['S']
-            else:
-                person = 'no match found'
-
-            print (match['Face']['FaceId'],match['Face']['Confidence'],person)
+    # if len(response['FaceMatches']) > 0:
+    #     # Return results
+    #     # print ('Coordinates ', box)
+    #     for match in response['FaceMatches']:
+    #
+    #         face = dynamodb.get_item(
+    #             TableName='face_collection',
+    #             Key={'RekognitionId': {'S': match['Face']['FaceId']}}
+    #             )
+    #         pprint(face)
+    #         if 'Item' in face:
+    #             # pprint(person)
+    #             person = face['Item']['FullName']['S']
+    #         else:
+    #             person = 'no match found'
+    #
+    #         print (match['Face']['FaceId'],match['Face']['Confidence'],person)
