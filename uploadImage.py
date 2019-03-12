@@ -7,12 +7,14 @@ images=[('Aiden.jpeg','Aiden'),
       ('Caleb.jpeg','Caleb'),
       ('Effy.jpeg','Effy'),
       ('Elizabeth.jpeg','Niels Bohr'),
-      ('Ellen.jpeg','Niels Bohr'),
-      ('Huiyi.jpeg','Niels Bohr'),
+      ('Ellen.jpeg','Ellen'),
+      ('Hweiyi.jpeg','Huiyi'),
       ('Jenna.jpeg','Jenna'),
       ('Jiyao.jpeg','Jiyao'),
       ('Kimberly.jpeg','Kimberly'),
-      ('Yen.jpeg','Yen')
+      ('Yen.jpeg','Yen'),
+      ('Effy2.jpeg','Effy'),
+      ('Jiyao2.jpg','Jiyao')
       ]
 
 # Iterate through list to upload objects to S3
@@ -22,5 +24,3 @@ for image in images:
     ret = object.put(Body=file,
                     Metadata={'FullName':image[1]}
                     )
-
-def uploadFace
