@@ -46,8 +46,10 @@ for face in all_faces:
             CollectionId='itpFaces',
             Image={'Bytes':image_crop_binary}
             )
-    pprint(response["FaceMatches"][0]["Face"]["ExternalImageId"])
-    # pprint(response)
+    matchedFile = response["FaceMatches"][0]["Face"]["ExternalImageId"]
+    b = matchedFile.index(".")
+    returnName = matchedFile[:b]
+    pprint(returnName)
 
     # if len(response['FaceMatches']) > 0:
     #     # Return results
