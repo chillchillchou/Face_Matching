@@ -21,6 +21,7 @@ rekognition = boto3.client('rekognition', region_name='us-east-1')
 dynamodb = boto3.client('dynamodb', region_name='us-east-1')
 
 
+
 # Captures a single image from the camera and returns it in PIL format
 def get_image(camera):
  # read is the easiest way to get a full image out of a VideoCapture object.
@@ -99,10 +100,33 @@ def findName (file):
         engine.pyttsx.init()
         engine.say('Good morning.')
 
+def detectEmotion ():
+
+    response = client.detect_faces(Image={'S3Object':{'Bucket':bucket,'Name':photo}},Attributes=['ALL'])
+
+    print('Detected faces for ' + photo)
+    for faceDetail in response['FaceDetails']:
+        for emotion in faceDetail['Emotions']:
+            if emotion['Confidence'] > 60:
+                print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
 
 fileName=take_picture()
 name=findName(fileName)
-pprint (name)
+with open(fileName, 'rb') as image:
+        response = rekognition.detect_faces(Image={'Bytes': image.read()}, Attributes=['ALL'])
+pprint (response)
+print('Detected faces for ' + name)
 engine = pyttsx3.init();
 engine.say("hello, "+name);
+
+no_emotion=True
+for faceDetail in response['FaceDetails']:
+    for emotion in faceDetail['Emotions']:
+        if emotion['Confidence'] > 50:
+            # print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
+            engine.say("Looks like you are "+str(emotion['Type']));
+            no_emotion=False
+if no_emotion:
+    engine.say("Looks like you are not displaying any emotion")
+
 engine.runAndWait();
