@@ -53,7 +53,7 @@ def findName (file):
         pprint(response)
 
 
-findName("test.jpg")
+findName("img_03161633.jpeg")
 
     # if len(response['FaceMatches']) > 0:
     #     # Return results

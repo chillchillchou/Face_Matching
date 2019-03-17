@@ -4,7 +4,7 @@ if __name__ == "__main__":
 
     bucket='itpface'
     collectionId='itpFaces'
-    photo='Huiyi.jpeg'
+    photo='Effy.jpeg'
 
     client=boto3.client('rekognition')
 
@@ -13,7 +13,7 @@ if __name__ == "__main__":
                                 ExternalImageId=photo,
                                 MaxFaces=2,
                                 QualityFilter="AUTO",
-                                DetectionAttributes=['ALL'])
+                                DetectionAttributes=['DEFAULT'])
 
     print ('Results for ' + photo)
     print('Faces indexed:')

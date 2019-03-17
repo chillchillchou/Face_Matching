@@ -93,11 +93,11 @@ def findName (file):
                 )
         pprint (response)
         matchedFile = response["FaceMatches"][0]["Face"]["ExternalImageId"]
-        b = matchedFile.index(".")
-        returnName = matchedFile[:b]
-        return returnName
-        # engine.pyttsx.init()
-        # engine.say('Good morning.')
+        # b = matchedFile.index(".")
+        # returnName = matchedFile[:b]
+        return matchedFile
+        engine.pyttsx.init()
+        engine.say('Good morning.')
 
 
 fileName=take_picture()
