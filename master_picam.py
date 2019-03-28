@@ -5,17 +5,18 @@ import io
 from PIL import Image
 from pprint import pprint
 import os
-import datetime
 import re
 import pyttsx3
 import time
 import picamera
+from gpiozero import Button
 
-
+#connect to aws server
 rekognition = boto3.client('rekognition', region_name='us-east-1')
-dynamodb = boto3.client('dynamodb', region_name='us-east-1')
+#dynamodb = boto3.client('dynamodb', region_name='us-east-1')
 
-
+#define button pin
+button = Button(17)
 
 def take_picture():
     with picamera.PiCamera()as camera:
@@ -89,20 +90,27 @@ def detectEmotion ():
             if emotion['Confidence'] > 60:
                 print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
 
+# Now trigger the event after button is pressed
+button.wait_for_press()
+# take a picture and return the name of the filename
 fileName=take_picture()
+#submitting the picture to aws Rekognition and serch for matching name
 name=findName(fileName)
-with open(fileName, 'rb') as image:
-        response = rekognition.detect_faces(Image={'Bytes': image.read()}, Attributes=['ALL'])
-pprint (response)
 print('Detected faces for ' + name)
 engine = pyttsx3.init();
 engine.say("hello, "+name);
 
+#detect emtotion
+with open(fileName, 'rb') as image:
+        response = rekognition.detect_faces(Image={'Bytes': image.read()}, Attributes=['ALL'])
+#pprint (response)
+
+#flag for emotion detection
 no_emotion=True
 for faceDetail in response['FaceDetails']:
     for emotion in faceDetail['Emotions']:
+#print the emotion if one of the emotion types have confidence score larger than 50 
         if emotion['Confidence'] > 50:
-            # print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
             engine.say("Looks like you are "+str(emotion['Type']));
             no_emotion=False
 if no_emotion:
