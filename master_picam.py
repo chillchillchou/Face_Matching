@@ -7,10 +7,10 @@ from pprint import pprint
 import os
 import datetime
 import re
-import pyttsx3
+#import pyttsx3
 import time
 import picamera
-
+#from espeak import espeak
 
 rekognition = boto3.client('rekognition', region_name='us-east-1')
 dynamodb = boto3.client('dynamodb', region_name='us-east-1')
@@ -31,7 +31,7 @@ def take_picture():
 
         camera.capture(file)
 
-    os.system("say Hello 'I am processing picture'")
+    os.system("espeak 'Hello I am processing pictures'")
     return(file)
 
 def findName (file):
@@ -76,9 +76,7 @@ def findName (file):
         # b = matchedFile.index(".")
         # returnName = matchedFile[:b]
         return matchedFile
-        engine.pyttsx.init()
-        engine.say('Good morning.')
-
+        
 def detectEmotion ():
 
     response = client.detect_faces(Image={'S3Object':{'Bucket':bucket,'Name':photo}},Attributes=['ALL'])
@@ -95,17 +93,17 @@ with open(fileName, 'rb') as image:
         response = rekognition.detect_faces(Image={'Bytes': image.read()}, Attributes=['ALL'])
 pprint (response)
 print('Detected faces for ' + name)
-engine = pyttsx3.init();
-engine.say("hello, "+name);
+os.system('espeak "{}"'.format(name))
+
 
 no_emotion=True
 for faceDetail in response['FaceDetails']:
     for emotion in faceDetail['Emotions']:
         if emotion['Confidence'] > 50:
             # print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
-            engine.say("Looks like you are "+str(emotion['Type']));
+            emotion_str = str(emotion['Type'])
+            #os.system("espeak emotion_str");
             no_emotion=False
 if no_emotion:
-    engine.say("Looks like you are not displaying any emotion")
+    os.system("espeak 'I can not tell your emotion'")
 
-engine.runAndWait();
