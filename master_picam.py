@@ -92,4 +92,6 @@ def detectEmotion():
             if emotion['Confidence'] > 60:
                 print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
 
-
+while True:
+    button.wait_for_press()
+    print("Pressed")
