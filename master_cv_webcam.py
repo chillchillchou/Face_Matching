@@ -24,7 +24,6 @@ dynamodb = boto3.client('dynamodb', region_name='us-east-1')
 
 # Captures a single image from the camera and returns it in PIL format
 def get_image(camera):
- # read is the easiest way to get a full image out of a VideoCapture object.
  retval, im = camera.read()
  return im
 
@@ -44,14 +43,13 @@ def take_picture():
     print(fileName)
     file = "img_cap/img_"+fileName+".jpeg"
 
-    # A nice feature of the imwrite method is that it will automatically choose the
+    # imwrite method will automatically choose the
     # correct format based on the file extension you provide. Convenient!
     cv2.imwrite(file, camera_capture)
     os.system("say Hello 'I am processing picture'")
 
 
-    # You'll want to release the camera, otherwise you won't be able to create a new
-    # capture object until your script exits
+    # release the camera
     del(camera)
     return file
 
