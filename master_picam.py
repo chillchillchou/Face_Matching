@@ -103,7 +103,8 @@ for faceDetail in response['FaceDetails']:
             # print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
             emotion_str = str(emotion['Type'])
             #os.system("espeak emotion_str");
-            os.system("espeak Looks like you are,"+emotion_str)
+            print("looks like you are," + emotion_str)
+            os.system("espeak \'Looks like you are\'"+emotion_str)
             no_emotion=False
 if no_emotion:
     os.system("espeak 'I can not tell your emotion'")
