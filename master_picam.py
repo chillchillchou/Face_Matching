@@ -93,24 +93,25 @@ def detectEmotion():
                 print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
 
 
-while True:
-    button.wait_for_press()
-    print("Pressed")
-    # fileName = take_picture()
-    # name = findName(fileName)
-    # with open(fileName, 'rb') as image:
-    #     response = rekognition.detect_faces(
-    #         	  Image={'Bytes': image.read()}, Attributes=['ALL'])
-    # 	# pprint (response)
-    # 	print('Detected faces for ' + name)
-    # 	os.system("espeak Hello," + name)
-    # 	no_emotion = True
-    # 	for faceDetail in response['FaceDetails']:
-    #     		for emotion in faceDetail['Emotions']:
-    #         		if emotion['Confidence'] > 50:
-    #                     emotion_str = str(emotion['Type'])
-    #             		print("looks like you are," + emotion_str)
-    #             		os.system("espeak \'Looks like you are\'"+emotion_str);
-    #          			no_emotion=False
-    #     if no_emotion:
-    #         os.system("espeak 'I can not tell your emotion'")
+def pressButton():
+    fileName = take_picture()
+    name = findName(fileName)
+    with open(fileName, 'rb') as image:
+        response = rekognition.detect_faces(
+            	  Image={'Bytes': image.read()}, Attributes=['ALL'])
+    	# pprint (response)
+    	print('Detected faces for ' + name)
+    	os.system("espeak Hello," + name)
+    	no_emotion = True
+    	for faceDetail in response['FaceDetails']:
+        		for emotion in faceDetail['Emotions']:
+            		if emotion['Confidence'] > 50:
+                        emotion_str = str(emotion['Type'])
+                		print("looks like you are," + emotion_str)
+                		os.system("espeak \'Looks like you are\'"+emotion_str);
+             			no_emotion=False
+        if no_emotion:
+            os.system("espeak 'I can not tell your emotion'")
+
+button.when_pressed = pressButton()
+pause()
