@@ -113,5 +113,6 @@ def pressButton():
     if no_emotion:
         os.system("espeak 'I can not tell your emotion'");
 
-button.when_pressed = pressButton()
-pause()
+while True:
+    button.wait_for_press()
+    print (pressed)
