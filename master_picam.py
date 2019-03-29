@@ -115,4 +115,4 @@ def pressButton():
 
 while True:
     button.wait_for_press()
-    print (pressed)
+    print ("pressed")
