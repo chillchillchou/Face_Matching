@@ -76,7 +76,7 @@ def findName (file):
         # b = matchedFile.index(".")
         # returnName = matchedFile[:b]
         return matchedFile
-        
+
 def detectEmotion ():
 
     response = client.detect_faces(Image={'S3Object':{'Bucket':bucket,'Name':photo}},Attributes=['ALL'])
@@ -93,7 +93,7 @@ with open(fileName, 'rb') as image:
         response = rekognition.detect_faces(Image={'Bytes': image.read()}, Attributes=['ALL'])
 pprint (response)
 print('Detected faces for ' + name)
-os.system('espeak "{}"'.format(name))
+os.system("espeak Hello,"+name)
 
 
 no_emotion=True
@@ -103,7 +103,7 @@ for faceDetail in response['FaceDetails']:
             # print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
             emotion_str = str(emotion['Type'])
             #os.system("espeak emotion_str");
+            os.system("Looks like you are,"+name)
             no_emotion=False
 if no_emotion:
     os.system("espeak 'I can not tell your emotion'")
-
