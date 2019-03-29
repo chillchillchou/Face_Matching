@@ -7,18 +7,17 @@ from pprint import pprint
 import os
 import datetime
 import re
-# import pyttsx3
 import time
 import picamera
-# from espeak import espeak
 from gpiozero import Button
 
+#connect to aws rekognition
 rekognition = boto3.client('rekognition', region_name='us-east-1')
-dynamodb = boto3.client('dynamodb', region_name='us-east-1')
 
+#define button pin
 button = Button(2)
 
-
+#take a picture and save as a local file
 def take_picture():
     with picamera.PiCamera()as camera:
         camera.resolution = (1024, 768)
@@ -36,7 +35,7 @@ def take_picture():
     os.system("espeak 'Hello I am processing pictures'")
     return(file)
 
-
+#upload the captured picture to aws and search for matching face
 def findName(file):
     image = Image.open(file)
     stream = io.BytesIO()
@@ -94,21 +93,24 @@ def detectEmotion():
                 print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
 
 
-fileName = take_picture()
-name = findName(fileName)
-with open(fileName, 'rb') as image:
-    response = rekognition.detect_faces(
-        	  Image={'Bytes': image.read()}, Attributes=['ALL'])
-	# pprint (response)
-	print('Detected faces for ' + name)
-	os.system("espeak Hello," + name)
-	no_emotion = True
-	for faceDetail in response['FaceDetails']:
-    		for emotion in faceDetail['Emotions']:
-        		if emotion['Confidence'] > 50:
-                    emotion_str = str(emotion['Type'])
-            		print("looks like you are," + emotion_str)
-            		os.system("espeak \'Looks like you are\'"+emotion_str);
-         			no_emotion=False
-    if no_emotion:
-        os.system("espeak 'I can not tell your emotion'")
+while True:
+    button.wait_for_press()
+    print("Pressed")
+    fileName = take_picture()
+    name = findName(fileName)
+    with open(fileName, 'rb') as image:
+        response = rekognition.detect_faces(
+            	  Image={'Bytes': image.read()}, Attributes=['ALL'])
+    	# pprint (response)
+    	print('Detected faces for ' + name)
+    	os.system("espeak Hello," + name)
+    	no_emotion = True
+    	for faceDetail in response['FaceDetails']:
+        		for emotion in faceDetail['Emotions']:
+            		if emotion['Confidence'] > 50:
+                        emotion_str = str(emotion['Type'])
+                		print("looks like you are," + emotion_str)
+                		os.system("espeak \'Looks like you are\'"+emotion_str);
+             			no_emotion=False
+        if no_emotion:
+            os.system("espeak 'I can not tell your emotion'")
