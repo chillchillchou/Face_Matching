@@ -109,10 +109,9 @@ def pressButton():
                 emotion_str = str(emotion['Type'])
                 print("looks like you are," + emotion_str)
                 os.system("espeak \'Looks like you are\'"+emotion_str);
-             	no_emotion=False
+                o_emotion=False
     if no_emotion:
-        os.system("espeak 'I can not tell your emotion'")
-
+        os.system("espeak 'I can not tell your emotion'");
 
 button.when_pressed = pressButton()
 pause()
