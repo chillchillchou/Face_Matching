@@ -1,12 +1,12 @@
+
 import cv2
 import sys
 
-cascPath = "haarcascade_frontalface_default.xml"
-faceCascade = cv2.CascadeClassifier(cascPath)
-
+faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 video_capture = cv2.VideoCapture(0)
 
 while True:
+
     # Capture frame-by-frame
     ret, frame = video_capture.read()
 
@@ -28,7 +28,9 @@ while True:
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+    if cv2.waitKey(1) & 0xFF == ord('c'):
+        crop_img = frame[y: y + h, x: x + w] # Crop from x, y, w, h -> 100, 200, 300, 400
+        cv2.imwrite("face.jpg", crop_img)
 
-# When everything is done, release the capture
 video_capture.release()
 cv2.destroyAllWindows()

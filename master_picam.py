@@ -1,5 +1,5 @@
 import numpy as np
-import cv2
+#import cv2
 import boto3
 import io
 from PIL import Image
@@ -114,8 +114,8 @@ def uploadSingleImg(filename,name):
     print (response)
 
 
-while True:
-    button.wait_for_press()
+while True: #comment this out if you ar enot using a button
+    button.wait_for_press() #comment this out if you ar enot using a button
     print ("pressed")
     fileName = take_picture()
     name = findName(fileName)
@@ -141,6 +141,6 @@ while True:
         uploadSingleImg(fileName, name_input)
         print (fileName)
         print(name_input)
-        
-    button.wait_for_release()
+
+    button.wait_for_release() #comment this out if you ar enot using a button
     print ("released")

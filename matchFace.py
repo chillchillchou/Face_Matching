@@ -54,21 +54,3 @@ def findName (file):
 
 
 findName("img_03161633.jpeg")
-
-    # if len(response['FaceMatches']) > 0:
-    #     # Return results
-    #     # print ('Coordinates ', box)
-    #     for match in response['FaceMatches']:
-    #
-    #         face = dynamodb.get_item(
-    #             TableName='face_collection',
-    #             Key={'RekognitionId': {'S': match['Face']['FaceId']}}
-    #             )
-    #         pprint(face)
-    #         if 'Item' in face:
-    #             # pprint(person)
-    #             person = face['Item']['FullName']['S']
-    #         else:
-    #             person = 'no match found'
-    #
-    #         print (match['Face']['FaceId'],match['Face']['Confidence'],person)
