@@ -102,8 +102,8 @@ while True:
         response = rekognition.detect_faces(
             	  Image={'Bytes': image.read()}, Attributes=['ALL'])
     	# pprint (response)
-    print('Detected faces for ' + name)
-    os.system("espeak Hello," + name)
+    print('Detected faces for ' + str(name))
+    os.system("espeak Hello," + str(name))
     no_emotion = True
     for faceDetail in response['FaceDetails']:
         for emotion in faceDetail['Emotions']:
