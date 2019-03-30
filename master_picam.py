@@ -32,7 +32,7 @@ def take_picture():
 
         camera.capture(file)
 
-    os.system("espeak 'Hello I am processing pictures'" 2>/dev/nulls)
+    os.system("espeak 'Hello I am processing pictures'")
     return(file)
 
 #upload the captured picture to aws and search for matching face
@@ -103,16 +103,16 @@ while True:
             	  Image={'Bytes': image.read()}, Attributes=['ALL'])
     	# pprint (response)
     print('Detected faces for ' + str(name))
-    os.system("espeak Hello," + str(name) 2>/dev/null)
+    os.system("espeak Hello," + str(name))
     no_emotion = True
     for faceDetail in response['FaceDetails']:
         for emotion in faceDetail['Emotions']:
             if emotion['Confidence'] > 50:
                 emotion_str = str(emotion['Type'])
                 print("looks like you are," + emotion_str)
-                os.system("espeak \'Looks like you are\'"+emotion_str 2>/dev/null );
+                os.system("espeak \'Looks like you are\'"+emotion_str);
                 o_emotion=False
     if no_emotion:
-        os.system("espeak 'I can not tell your emotion'" 2>/dev/null);
+        os.system("espeak 'I can not tell your emotion'");
     button.wait_for_release()
     print ("released")
