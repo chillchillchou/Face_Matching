@@ -119,11 +119,12 @@ while True: #comment this out if you ar enot using a button
     print ("pressed")
     fileName = take_picture()
     name = findName(fileName)
+    #if a face is matched
     if name:
         with open(fileName, 'rb') as image:
             response = rekognition.detect_faces(
                 	  Image={'Bytes': image.read()}, Attributes=['ALL'])
-        	# pprint (response)
+
         print('Detected faces for ' + str(name))
         os.system("espeak Hello," + str(name))
         no_emotion = True
