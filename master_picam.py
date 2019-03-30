@@ -93,7 +93,9 @@ def detectEmotion():
                 print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
 
 
-def pressButton():
+while True:
+    button.wait_for_press()
+    print ("pressed")
     fileName = take_picture()
     name = findName(fileName)
     with open(fileName, 'rb') as image:
@@ -112,10 +114,6 @@ def pressButton():
                 o_emotion=False
     if no_emotion:
         os.system("espeak 'I can not tell your emotion'");
-
-while True:
-    button.wait_for_press()
-    print ("pressed")
     pressButton()
     button.wait_for_release()
     print ("released")
