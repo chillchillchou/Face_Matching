@@ -16,7 +16,10 @@ camera_port = 0
 
 #Number of frames to throw away while the camera adjusts to light levels
 ramp_frames = 30
-
+bucket='itpface'
+collectionId='itpFaces'
+s3 = boto3.resource('s3')
+client=boto3.client('rekognition')
 rekognition = boto3.client('rekognition', region_name='us-east-1')
 dynamodb = boto3.client('dynamodb', region_name='us-east-1')
 
@@ -90,13 +93,16 @@ def findName (file):
                 CollectionId='itpFaces',
                 Image={'Bytes':image_crop_binary}
                 )
-        pprint (response)
-        matchedFile = response["FaceMatches"][0]["Face"]["ExternalImageId"]
-        # b = matchedFile.index(".")
-        # returnName = matchedFile[:b]
-        return matchedFile
-        engine.pyttsx.init()
-        engine.say('Good morning.')
+        face_found= len((response["FaceMatches"]))
+        if face_found:
+            print('found '+str(face_found) + 'face')
+            matchedFile = response["FaceMatches"][0]["Face"]["ExternalImageId"]
+            # b = matchedFile.index(".")
+            # returnName = matchedFile[:b]
+            return matchedFile
+        if not face_found:
+            return
+
 
 def detectEmotion ():
 
@@ -108,23 +114,44 @@ def detectEmotion ():
             if emotion['Confidence'] > 60:
                 print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
 
+def uploadSingleImg(filename,name):
+    file = open(fileName,'rb')
+    object = s3.Object('itpface', fileName)
+    ret = object.put(Body=file,
+                    Metadata={'FullName':name}
+                    )
+    response = client.index_faces(CollectionId=collectionId,
+                                    Image={'S3Object':{'Bucket':bucket,'Name':fileName}},
+                                    ExternalImageId=name,
+                                    MaxFaces=2,
+                                    QualityFilter="AUTO",
+                                    DetectionAttributes=['DEFAULT'])
+    pprint (response)
+
+
 fileName=take_picture()
 name=findName(fileName)
-with open(fileName, 'rb') as image:
-        response = rekognition.detect_faces(Image={'Bytes': image.read()}, Attributes=['ALL'])
-pprint (response)
-print('Detected faces for ' + name)
-engine = pyttsx3.init();
-engine.say("hello, "+name);
+if name:
+    with open(fileName, 'rb') as image:
+            response = rekognition.detect_faces(Image={'Bytes': image.read()}, Attributes=['ALL'])
+    pprint (response)
+    print(name)
+    engine = pyttsx3.init();
+    engine.say("hello, "+name);
 
-no_emotion=True
-for faceDetail in response['FaceDetails']:
-    for emotion in faceDetail['Emotions']:
-        if emotion['Confidence'] > 50:
-            # print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
-            engine.say("Looks like you are "+str(emotion['Type']));
-            no_emotion=False
-if no_emotion:
-    engine.say("Looks like you are not displaying any emotion")
+    no_emotion=True
+    for faceDetail in response['FaceDetails']:
+        for emotion in faceDetail['Emotions']:
+            if emotion['Confidence'] > 50:
+                # print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
+                engine.say("Looks like you are "+str(emotion['Type']));
+                no_emotion=False
+    if no_emotion:
+        engine.say("Looks like you are not displaying any emotion")
 
-engine.runAndWait();
+    engine.runAndWait();
+else:
+    name_input = input('What is your name? ')
+    uploadSingleImg(fileName, name_input)
+    print (fileName)
+    print(name_input)
