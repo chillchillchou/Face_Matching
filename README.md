@@ -26,3 +26,5 @@ Set up AWS SDK: https://docs.aws.amazon.com/rekognition/latest/dg/setup-awscli-s
 
 ###install
 #### If you are using a pi:
+$pip install boto3
+$pip install PiCamera

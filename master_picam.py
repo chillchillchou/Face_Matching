@@ -1,8 +1,8 @@
-import numpy as np
+#import numpy as np
 #import cv2
 import boto3
 import io
-from PIL import Image
+#from PIL import Image
 from pprint import pprint
 import os
 import datetime
