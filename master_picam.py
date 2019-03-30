@@ -116,5 +116,6 @@ def pressButton():
 while True:
     button.wait_for_press()
     print ("pressed")
+    pressButton()
     button.wait_for_release()
     print ("released")
