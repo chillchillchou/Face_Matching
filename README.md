@@ -32,7 +32,8 @@ $pip install pil<br/>
 
 #### if you are using webcam
 $pip install numpy
-$pip install cv2<br/>
+$pip install opencv-python
+
 
 ### Use
 With a picamera:
@@ -49,4 +50,4 @@ run $uploadImage.py <filename><person's name><br/>
 
 ### Future steps </br>
 1. Now faces are all saved locally after captured and being uploaded to aws. this step can be skipped so that pictures are captured and saved directly to stream
-2. Use opencv face detection so that the functions are only triggered after a face is detected. But running that on pi is making it slow so maybe not 
+2. Use opencv face detection so that the functions are only triggered after a face is detected. But running that on pi is making it slow so maybe not

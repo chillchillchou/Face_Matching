@@ -40,7 +40,7 @@ def take_picture():
     return(file)
 
 #upload the captured picture to aws and search for matching face
-def findName(file):
+def find_name(file):
     image = Image.open(file)
     stream = io.BytesIO()
     image.save(stream,format="JPEG")
@@ -87,7 +87,7 @@ def findName(file):
             return
 
 
-def detectEmotion():
+def detect_emotion():
 
     response = client.detect_faces(
         Image={'S3Object': {'Bucket': bucket, 'Name': photo}}, Attributes=['ALL'])
@@ -98,7 +98,7 @@ def detectEmotion():
             if emotion['Confidence'] > 60:
                 print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
 
-def uploadSingleImg(filename,name):
+def upload_img_single(filename,name):
     file = open(fileName,'rb')
     object = s3.Object('itpface', fileName)
     ret = object.put(Body=file,
@@ -117,7 +117,7 @@ while True: #comment this out if you ar enot using a button
     button.wait_for_press() #comment this out if you ar enot using a button
     print ("pressed")
     fileName = take_picture()
-    name = findName(fileName)
+    name = find_name(fileName)
     if name:
         with open(fileName, 'rb') as image:
             response = rekognition.detect_faces(
@@ -137,7 +137,7 @@ while True: #comment this out if you ar enot using a button
             os.system("espeak 'I can not tell your emotion'");
     else:
         name_input = input('What is your name? ')
-        uploadSingleImg(fileName, name_input)
+        upload_img_single(fileName, name_input)
         print (fileName)
         print(name_input)
 
