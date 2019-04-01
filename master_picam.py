@@ -56,8 +56,7 @@ def findName(file):
     boxes = []
 
     # Get image diameters
-    image_width = image.size[0]
-    image_height = image.size[1]
+    image_height, image_width = image.shape[:2]
 
     # Crop face from image
     for face in all_faces:
