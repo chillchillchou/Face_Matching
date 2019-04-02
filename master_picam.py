@@ -36,7 +36,7 @@ def take_picture():
 
         camera.capture(file)
 
-    os.system("espeak \"Hello I am processing pictures\"--stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+    os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp");
     return(file)
 
 #upload the captured picture to aws and search for matching face
@@ -132,7 +132,7 @@ while True: #comment this out if you ar enot using a button
                 if emotion['Confidence'] > 50:
                     emotion_str = str(emotion['Type'])
                     print("looks like you are," + emotion_str)
-                    os.system("espeak \'Looks like you are\'"+emotion_str);
+                    os.system("espeak \"Looks like you are" + emotion_str+"\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp");
                     no_emotion=False
         if no_emotion:
             os.system("espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp");
