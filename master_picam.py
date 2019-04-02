@@ -32,18 +32,19 @@ def take_picture():
         fileName = re.sub(r'\D', "", t)[4:12]
         file = "img_cap/img_" + fileName + ".jpeg"
         print("Taking image...")
-        # Take the actual image we want to keep
-
-        camera.capture(file)
+        #create a temp variable to store picture stream
+        temp_stream = io.BytesIO()
+        # Take the actual image we want to kee
+        camera.capture(temp_stream)
 
     os.system("espeak 'Hello I am processing pictures'")
-    return(file)
+    return(temp_stream)
 
 #upload the captured picture to aws and search for matching face
 def find_name(file):
-    image = Image.open(file)
-    stream = io.BytesIO()
-    image.save(stream,format="JPEG")
+    # image = Image.open(file)
+    # stream = io.BytesIO()
+    image.save(temp_stream,format="JPEG")
     image_binary = stream.getvalue()
 
     response = rekognition.detect_faces(
