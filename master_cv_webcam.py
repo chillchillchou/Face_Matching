@@ -12,12 +12,12 @@ import pyttsx3
 
 
 # Camera 0 is the integrated web cam on my netbook
-camera_port = 0
+CAMERA_PORT = 0
 
 #Number of frames to throw away while the camera adjusts to light levels
-ramp_frames = 30
-bucket='itpface'
-collectionId='itpFaces'
+RAMP_FRAMES = 30
+BUCKET='itpface'
+COLLECTION_ID='itpFaces'
 s3 = boto3.resource('s3')
 client=boto3.client('rekognition')
 rekognition = boto3.client('rekognition', region_name='us-east-1')
@@ -35,7 +35,7 @@ def get_image(camera):
 
 def take_picture():
     # initialize the camera capture object with the cv2.VideoCapture class.
-    camera = cv2.VideoCapture(camera_port)
+    camera = cv2.VideoCapture(CAMERA_PORT)
     print("Taking image...")
     # Take the actual image we want to keep
     camera_capture = get_image(camera)
@@ -104,7 +104,7 @@ def findName (file):
 
 def detectEmotion ():
 
-    response = client.detect_faces(Image={'S3Object':{'Bucket':bucket,'Name':photo}},Attributes=['ALL'])
+    response = client.detect_faces(Image={'S3Object':{'Bucket':BUCKET,'Name':photo}},Attributes=['ALL'])
 
     print('Detected faces for ' + photo)
     for faceDetail in response['FaceDetails']:
@@ -118,8 +118,8 @@ def uploadSingleImg(filename,name):
     ret = object.put(Body=file,
                     Metadata={'FullName':name}
                     )
-    response = client.index_faces(CollectionId=collectionId,
-                                    Image={'S3Object':{'Bucket':bucket,'Name':fileName}},
+    response = client.index_faces(CollectionId=COLLECTION_ID,
+                                    Image={'S3Object':{'Bucket':BUCKET,'Name':fileName}},
                                     ExternalImageId=name,
                                     MaxFaces=2,
                                     QualityFilter="AUTO",
