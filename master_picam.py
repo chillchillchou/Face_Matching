@@ -102,10 +102,10 @@ def detectEmotion():
                 print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
 
 
-def uploadSingleImg(filename, name):
-    file = open(fileName, 'rb')
+def uploadSingleImg(stream, name):
+    # file = open(fileName, 'rb')
     object = s3.Object('itpface', fileName)
-    ret = object.put(Body=file,
+    ret = object.put(Body=stream.read(),
                      Metadata={'FullName': name}
                      )
     response = client.index_faces(CollectionId=COLLECTION_ID,
@@ -158,7 +158,7 @@ def main():
             else:
                 os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
                 name_input = input('What is your name? ')
-                # uploadSingleImg(fileName, name_input)
+                uploadSingleImg(stream, name_input)
                 #print(fileName)
                 print(name_input)
                 os.system("espeak \"Hello" + str(name_input)
