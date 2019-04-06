@@ -57,7 +57,7 @@ def findName(stream):
     # Initialize list object
     boxes = []
 
-    image = Image.frombytes(stream)
+    image = Image.open(stream)
     # Get image diameters
     image_width = image.size[0]
     image_height = image.size[1]
