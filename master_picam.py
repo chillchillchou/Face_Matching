@@ -108,7 +108,7 @@ def uploadSingleImg(stream, name):
     # file = open(fileName, 'rb')
     t = str(datetime.datetime.now())
     fileName = re.sub(r'\D', "", t)[4:12] + ".jpeg"
-    
+
     object = s3.Object('itpface', fileName)
     ret = object.put(Body=stream.getvalue(),
                      Metadata={'FullName': name}
@@ -132,7 +132,6 @@ def main():
         stream = io.BytesIO()
 
         time.sleep(1)
-
 
         while True:  # comment this out if you ar enot using a button
             button.wait_for_press()  # comment this out if you ar enot using a button
