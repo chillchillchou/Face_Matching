@@ -166,3 +166,7 @@ def main():
 
             button.wait_for_release()  # comment this out if you ar enot using a button
             print("released")
+
+if __name__ == "__main__":
+    # execute only if run as a script
+    main()
