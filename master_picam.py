@@ -127,6 +127,7 @@ def uploadSingleImg(stream, name):
 def main():
     with picamera.PiCamera()as camera:
         camera.resolution = (1024, 768)
+        camera.rotation = 90
         camera.start_preview()
 
         stream = io.BytesIO()
