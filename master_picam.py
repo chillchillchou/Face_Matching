@@ -24,30 +24,26 @@ button = Button(2)
 # take a picture and save as a local file
 
 
-def take_picture():
-    with picamera.PiCamera()as camera:
-        camera.resolution = (1024, 768)
-        camera.start_preview()
-        # camera warm up
-        time.sleep(1)
-        t = str(datetime.datetime.now())
-        fileName = re.sub(r'\D', "", t)[4:12]
-        file = "img_cap/img_" + fileName + ".jpeg"
-        print("Taking image...")
-        # Take the actual image we want to keep
+def take_picture(camera, stream):
+    # camera warm up
+    # t = str(datetime.datetime.now())
+    # fileName = re.sub(r'\D', "", t)[4:12]
+    # file = "img_cap/img_" + fileName + ".jpeg"
+    print("Taking image...")
+    # Take the actual image we want to keep
 
-        camera.capture(file)
+    camera.capture(stream, format="jpeg")
 
     os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
-    return(file)
+    #return(file)
 
 # upload the captured picture to aws and search for matching face
 
 
-def findName(file):
-    image = Image.open(file)
-    stream = io.BytesIO()
-    image.save(stream, format="JPEG")
+def findName(stream):
+    # image = Image.open(stream)
+    # stream = io.BytesIO()
+    # image.save(stream, format="JPEG")
     image_binary = stream.getvalue()
 
     response = rekognition.detect_faces(
@@ -121,39 +117,50 @@ def uploadSingleImg(filename, name):
     print(response)
 
 
-while True:  # comment this out if you ar enot using a button
-    button.wait_for_press()  # comment this out if you ar enot using a button
-    print("pressed")
-    fileName = take_picture()
-    name = findName(fileName)
-    if name:
-        with open(fileName, 'rb') as image:
-            response = rekognition.detect_faces(
-                Image={'Bytes': image.read()}, Attributes=['ALL'])
-            # pprint (response)
-        print('Detected faces for ' + str(name))
-        os.system("espeak \"Hello" + str(name) +
-                  "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
-        no_emotion = True
-        for faceDetail in response['FaceDetails']:
-            for emotion in faceDetail['Emotions']:
-                if emotion['Confidence'] > 50:
-                    emotion_str = str(emotion['Type'])
-                    print("looks like you are," + emotion_str)
-                    os.system("espeak \"Looks like you are" + emotion_str
-                              + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
-                    no_emotion = False
-        if no_emotion:
-            os.system(
-                "espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
-    else:
-        os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
-        name_input = input('What is your name? ')
-        uploadSingleImg(fileName, name_input)
-        print(fileName)
-        print(name_input)
-        os.system("espeak \"Hello" + str(name_input)
-                  + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+def main():
+    with picamera.PiCamera()as camera:
+        camera.resolution = (1024, 768)
+        camera.start_preview()
 
-    button.wait_for_release()  # comment this out if you ar enot using a button
-    print("released")
+        stream = io.BytesIO()
+
+        time.sleep(1)
+
+
+        while True:  # comment this out if you ar enot using a button
+            button.wait_for_press()  # comment this out if you ar enot using a button
+            print("pressed")
+            take_picture(camera, stream)
+
+            name = findName(stream)
+
+            if name:
+                response = rekognition.detect_faces(
+                    Image={'Bytes': stream.read()}, Attributes=['ALL'])
+                    # pprint (response)
+                print('Detected faces for ' + str(name))
+                os.system("espeak \"Hello" + str(name) +
+                          "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+                no_emotion = True
+                for faceDetail in response['FaceDetails']:
+                    for emotion in faceDetail['Emotions']:
+                        if emotion['Confidence'] > 50:
+                            emotion_str = str(emotion['Type'])
+                            print("looks like you are," + emotion_str)
+                            os.system("espeak \"Looks like you are" + emotion_str
+                                      + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+                            no_emotion = False
+                if no_emotion:
+                    os.system(
+                        "espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+            else:
+                os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+                name_input = input('What is your name? ')
+                # uploadSingleImg(fileName, name_input)
+                print(fileName)
+                print(name_input)
+                os.system("espeak \"Hello" + str(name_input)
+                          + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+
+            button.wait_for_release()  # comment this out if you ar enot using a button
+            print("released")
