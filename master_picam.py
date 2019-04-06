@@ -42,7 +42,7 @@ def take_picture(camera, stream):
 
 
 def findName(stream):
-    # image = Image.open(stream)
+    image = Image.open(stream)
     # stream = io.BytesIO()
     # image.save(stream, format="JPEG")
     image_binary = stream.getvalue()
