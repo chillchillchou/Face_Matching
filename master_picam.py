@@ -106,6 +106,7 @@ def detectEmotion():
 
 def uploadSingleImg(stream, name):
     # file = open(fileName, 'rb')
+    fileName = now() + '.jpg'
     object = s3.Object('itpface', fileName)
     ret = object.put(Body=stream.getvalue(),
                      Metadata={'FullName': name}
