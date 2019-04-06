@@ -35,6 +35,8 @@ def take_picture(camera, stream):
     camera.capture(stream, format="jpeg")
 
     os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+
+    return Image.open(stream)
     #return(file)
 
 
@@ -42,13 +44,12 @@ def take_picture(camera, stream):
 
 
 def findName(stream):
-    image = Image.open(stream)
     # stream = io.BytesIO()
     # image.save(stream, format="JPEG")
-    image_binary = stream.getvalue()
+    #image_binary = stream.getvalue()
 
     response = rekognition.detect_faces(
-        Image={'Bytes': image_binary}
+        Image={'Bytes':  stream.getvalue()}
     )
 
     all_faces = response['FaceDetails']
@@ -56,6 +57,7 @@ def findName(stream):
     # Initialize list object
     boxes = []
 
+    image = Image.frombytes(stream)
     # Get image diameters
     image_width = image.size[0]
     image_height = image.size[1]
@@ -105,7 +107,7 @@ def detectEmotion():
 def uploadSingleImg(stream, name):
     # file = open(fileName, 'rb')
     object = s3.Object('itpface', fileName)
-    ret = object.put(Body=stream.read(),
+    ret = object.put(Body=stream.getvalue(),
                      Metadata={'FullName': name}
                      )
     response = client.index_faces(CollectionId=COLLECTION_ID,
@@ -138,7 +140,7 @@ def main():
 
             if name:
                 response = rekognition.detect_faces(
-                    Image={'Bytes': stream.read()}, Attributes=['ALL'])
+                    Image={'Bytes': stream.getvalue()}, Attributes=['ALL'])
                     # pprint (response)
                 print('Detected faces for ' + str(name))
                 os.system("espeak \"Hello" + str(name) +
