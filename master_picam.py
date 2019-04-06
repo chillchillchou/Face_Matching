@@ -38,7 +38,9 @@ def take_picture():
 
         camera.capture(file)
 
-    os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+
+    os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp");
+
     return(file)
 
 # upload the captured picture to aws and search for matching face
@@ -132,28 +134,29 @@ while True:  # comment this out if you ar enot using a button
                 Image={'Bytes': image.read()}, Attributes=['ALL'])
             # pprint (response)
         print('Detected faces for ' + str(name))
-        os.system("espeak \"Hello" + str(name) +
-                  "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+
+        os.system("espeak \"Hello" + str(name) + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+
         no_emotion = True
         for faceDetail in response['FaceDetails']:
             for emotion in faceDetail['Emotions']:
                 if emotion['Confidence'] > 50:
                     emotion_str = str(emotion['Type'])
                     print("looks like you are," + emotion_str)
-                    os.system("espeak \"Looks like you are" + emotion_str
-                              + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
-                    no_emotion = False
+
+                    os.system("espeak \"Looks like you are" + emotion_str+"\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp");
+                    no_emotion=False
         if no_emotion:
-            os.system(
-                "espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+            os.system("espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp");
     else:
-        os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+        os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp");
+
         name_input = input('What is your name? ')
         uploadSingleImg(fileName, name_input)
         print(fileName)
         print(name_input)
-        os.system("espeak \"Hello" + str(name_input)
-                  + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+
+        os.system("espeak \"Hello" + str(name_input)+"\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp");
 
     button.wait_for_release()  # comment this out if you ar enot using a button
     print("released")
