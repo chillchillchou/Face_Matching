@@ -28,7 +28,8 @@ def take_picture(camera, stream):
 
     print("Taking image...")
     # Take the actual image we want to keep
-
+    stream.seek(0)
+    stream.truncate()
     camera.capture(stream, format="jpeg")
     os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
     return Image.open(stream)
@@ -116,7 +117,7 @@ def uploadSingleImg(stream, name):
 
 
 def main():
-    with picamera.PiCamera()as camera:
+    with picamera.PiCamera() as camera:
         camera.resolution = (1024, 768)
         camera.rotation = 90
         camera.start_preview()
@@ -129,7 +130,6 @@ def main():
             button.wait_for_press()  # comment this out if you ar enot using a button
             print("pressed")
             take_picture(camera, stream)
-
             name = findName(stream)
 
             if name:
