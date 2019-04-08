@@ -25,20 +25,13 @@ button = Button(2)
 
 
 def take_picture(camera, stream):
-    # camera warm up
-    # t = str(datetime.datetime.now())
-    # fileName = re.sub(r'\D', "", t)[4:12]
-    # file = "img_cap/img_" + fileName + ".jpeg"
+
     print("Taking image...")
     # Take the actual image we want to keep
-
     camera.capture(stream, format="jpeg")
-
     os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
-
     return Image.open(stream)
     #return(file)
-
 
 # upload the captured picture to aws and search for matching face
 
