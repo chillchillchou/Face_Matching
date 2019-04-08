@@ -7,7 +7,7 @@ from pprint import pprint
 import os
 import datetime
 import re
-import pyttsx3
+# import pyttsx3
 
 
 
@@ -36,6 +36,8 @@ def get_image(camera):
 def take_picture():
     # initialize the camera capture object with the cv2.VideoCapture class.
     camera = cv2.VideoCapture(CAMERA_PORT)
+    for i in range(RAMP_FRAMES):
+        temp = get_image(camera)
     print("Taking image...")
     # Take the actual image we want to keep
     camera_capture = get_image(camera)
@@ -132,22 +134,24 @@ name=findName(fileName)
 if name:
     with open(fileName, 'rb') as image:
             response = rekognition.detect_faces(Image={'Bytes': image.read()}, Attributes=['ALL'])
-    pprint (response)
+    # pprint (response)
+    pprint(response['FaceDetails'][0]['Emotions'])
     print(name)
-    engine = pyttsx3.init();
-    engine.say("hello, "+name);
+    # engine = pyttsx3.init();
+    # engine.say("hello, "+name);
 
     no_emotion=True
     for faceDetail in response['FaceDetails']:
         for emotion in faceDetail['Emotions']:
             if emotion['Confidence'] > 50:
                 # print(str(emotion['Type']) + ', ' + str(emotion['Confidence']))
-                engine.say("Looks like you are "+str(emotion['Type']));
+                # engine.say("Looks like you are "+str(emotion['Type']));
                 no_emotion=False
     if no_emotion:
-        engine.say("Looks like you are not displaying any emotion")
-
-    engine.runAndWait();
+        print("no emotion")
+    #     engine.say("Looks like you are not displaying any emotion")
+    #
+    # engine.runAndWait();
 else:
     name_input = input('What is your name? ')
     uploadSingleImg(fileName, name_input)
