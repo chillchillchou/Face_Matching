@@ -139,6 +139,7 @@ def main():
                 print('Detected faces for ' + str(name))
                 os.system("espeak \"Hello" + str(name) +
                           "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+                pprint(response['FaceDetails'][0]['Emotions'])
                 no_emotion = True
                 for faceDetail in response['FaceDetails']:
                     for emotion in faceDetail['Emotions']:
