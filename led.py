@@ -9,7 +9,7 @@ while True:
     print("button pressed")
     led1.blink()
     led2.on()
-    sleep(2)
+    sleep(10)
     led1.off()
     led2.off()
     sleep(1)
