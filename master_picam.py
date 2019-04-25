@@ -9,7 +9,9 @@ import datetime
 import re
 import time
 import picamera
-from gpiozero import Button
+from gpiozero import Button，LED
+led_red = LED(23)
+led_green = LED(24)
 
 # connect to aws rekognition
 BUCKET = 'itpface'
@@ -19,7 +21,7 @@ client = boto3.client('rekognition')
 rekognition = boto3.client('rekognition', region_name='us-east-1')
 
 # define button pin
-button = Button(14)
+button = Button(25)
 
 # take a picture and save as a local file
 
@@ -129,6 +131,9 @@ def main():
         while True:  # comment this out if you ar enot using a button
             button.wait_for_press()  # comment this out if you ar enot using a button
             print("pressed")
+            led_green.off()
+            led_red.blink()
+
             take_picture(camera, stream)
             name = findName(stream)
 
@@ -136,6 +141,8 @@ def main():
                 response = rekognition.detect_faces(
                     Image={'Bytes': stream.getvalue()}, Attributes=['ALL'])
                     # pprint (response)
+                led_red.off()
+                led_green.on()
                 print('Detected faces for ' + str(name))
                 os.system("espeak \"Hello" + str(name) +
                           "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
@@ -163,6 +170,7 @@ def main():
 
             button.wait_for_release()  # comment this out if you ar enot using a button
             print("released")
+
 
 if __name__ == "__main__":
     # execute only if run as a script
