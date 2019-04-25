@@ -36,7 +36,7 @@ $ pip install pil
 #### if you are using webcam
 ```
 $ pip install numpy
-$ pip install cv2
+$ pip install opencv-python
 ```
 
 ### Use
