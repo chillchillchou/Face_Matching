@@ -7,7 +7,7 @@ button = Button(25)
 while True:
     button.wait_for_press()
     print("button pressed")
-    led1.on()
+    led1.blink()
     led2.on()
     sleep(2)
     led1.off()
