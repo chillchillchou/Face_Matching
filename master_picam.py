@@ -177,10 +177,11 @@ def button_1_pressed(camera, stream):
 
 
 def button_2_pressed():
-    print("button 2 pressed")
+    print("MOTOR ON")
     motor.on()
     sleep(5)
     motor.off()
+    print("motor off")
 
 
 def main():
