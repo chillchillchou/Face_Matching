@@ -10,7 +10,7 @@ import re
 import time
 import picamera
 from gpiozero import LED, Button,OutputDevice
-motor = OutputDevice(23)
+motor = OutputDevice(18)
 led_red = LED(23)
 led_green = LED(24)
 
