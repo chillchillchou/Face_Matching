@@ -22,6 +22,7 @@ rekognition = boto3.client('rekognition', region_name='us-east-1')
 
 # define button pin
 button = Button(25)
+button2 = Button(4)
 
 # take a picture and save as a local file
 
@@ -156,6 +157,17 @@ def main():
                             os.system("espeak \"Looks like you are" + emotion_str
                                       + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
                             no_emotion = False
+                        elif emotion['Type'] == "CALM":
+                            if emotion['Confidence'] > 10:
+                                print("looks like you are sad")
+                                motor.on()
+                                print("turn on motor")
+                                led.on()
+                                sleep(20)
+                                led.off()
+                                motor.off()
+                                print("turn off motor")
+
                 if no_emotion:
                     os.system(
                         "espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
