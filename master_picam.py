@@ -179,8 +179,6 @@ def button_1_pressed(camera, stream):
 def button2_pressed():
     print("button 2 pressed")
 
-button_1_press_triggered = False
-button_2_press_triggered = False
 
 def main():
     print('starting program')
@@ -194,6 +192,8 @@ def main():
         time.sleep(1)
 
 
+        button_1_press_triggered = False
+        button_2_press_triggered = False
 
         while True:  # comment th
             if button1.value == 1:
