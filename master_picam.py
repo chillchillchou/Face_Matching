@@ -194,9 +194,8 @@ def main():
 
 
 
-        while True:  # comment this out if you
-            print("loop")
-            if button1.is_held:
+        while True:  # comment th
+            if button1.value == 1:
                 print("buton 1 held.")
                 if not button_1_press_triggered:
                     print('triggering button 1')
