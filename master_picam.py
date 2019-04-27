@@ -195,6 +195,7 @@ def main():
 
         while True:  # comment this out if you
             if button1.is_held:
+                print("buton 1 held.")
                 if not button_1_press_triggered:
                     print('triggering button 1')
                     button_1_pressed(camera, stream)
