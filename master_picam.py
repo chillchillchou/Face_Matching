@@ -163,9 +163,9 @@ def main():
                                 print("looks like you are sad")
                                 motor.on()
                                 print("turn on motor")
-                                led.on()
-                                sleep(20)
-                                led.off()
+                                led_green.on()
+                                sleep(10)
+                                led_green.off()
                                 motor.off()
                                 print("turn off motor")
 
