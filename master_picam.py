@@ -176,7 +176,7 @@ def button_1_pressed(camera, stream):
                   + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
 
 
-def button2_pressed():
+def button_2_pressed():
     print("button 2 pressed")
 
 
