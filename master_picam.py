@@ -36,7 +36,7 @@ def take_picture(camera, stream):
     stream.seek(0)
     stream.truncate()
     camera.capture(stream, format="jpeg")
-    os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+    os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=730:C0:1B:8D:BF:7F,PROFILE=a2dp")
     return Image.open(stream)
     #return(file)
 
@@ -148,7 +148,7 @@ def main():
                 led_green.on()
                 print('Detected faces for ' + str(name))
                 os.system("espeak \"Hello" + str(name) +
-                          "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+                          "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
                 pprint(response['FaceDetails'][0]['Emotions'])
                 no_emotion = True
                 for faceDetail in response['FaceDetails']:
@@ -157,7 +157,7 @@ def main():
                             emotion_str = str(emotion['Type'])
                             print("looks like you are," + emotion_str)
                             os.system("espeak \"Looks like you are" + emotion_str
-                                      + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+                                      + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
                             no_emotion = False
                         if emotion['Type'] == "SAD":
                             if emotion['Confidence'] > 5:
@@ -172,7 +172,7 @@ def main():
 
                 if no_emotion:
                     os.system(
-                        "espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+                        "espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
             else:
                 os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
                 name_input = input('What is your name? ')
@@ -180,7 +180,7 @@ def main():
                 #print(fileName)
                 print(name_input)
                 os.system("espeak \"Hello" + str(name_input)
-                          + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+                          + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
 
             button.wait_for_release()  # comment this out if you ar enot using a button
             print("released")
