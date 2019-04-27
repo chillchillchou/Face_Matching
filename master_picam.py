@@ -36,7 +36,7 @@ def take_picture(camera, stream):
     stream.seek(0)
     stream.truncate()
     camera.capture(stream, format="jpeg")
-    os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=730:C0:1B:8D:BF:7F,PROFILE=a2dp")
+    os.system("espeak \"Hello Hello, I am processing your pictures\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
     return Image.open(stream)
     #return(file)
 
@@ -174,7 +174,7 @@ def main():
                     os.system(
                         "espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
             else:
-                os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
+                os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
                 name_input = input('What is your name? ')
                 uploadSingleImg(stream, name_input)
                 #print(fileName)
