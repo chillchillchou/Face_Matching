@@ -22,8 +22,12 @@ s3 = boto3.resource('s3')
 client = boto3.client('rekognition')
 rekognition = boto3.client('rekognition', region_name='us-east-1')
 
+
+def do_something_when_pressed():
+    print("button pressed")
+
 # define button pin
-button = Button(25)
+button1 = Button(25)
 button2 = Button(4)
 
 # take a picture and save as a local file
@@ -121,6 +125,62 @@ def uploadSingleImg(stream, name):
 
 
 
+def button_1_pressed(camera, stream):
+    print("pressed")
+    led_green.off()
+    led_red.blink()
+
+    take_picture(camera, stream)
+    name = findName(stream)
+
+    if name:
+        response = rekognition.detect_faces(
+            Image={'Bytes': stream.getvalue()}, Attributes=['ALL'])
+            # pprint (response)
+        led_red.off()
+        led_green.on()
+        print('Detected faces for ' + str(name))
+        os.system("espeak \"Hello" + str(name) +
+                  "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
+        pprint(response['FaceDetails'][0]['Emotions'])
+        no_emotion = True
+        for faceDetail in response['FaceDetails']:
+            for emotion in faceDetail['Emotions']:
+                if emotion['Confidence'] > 50:
+                    emotion_str = str(emotion['Type'])
+                    print("looks like you are," + emotion_str)
+                    os.system("espeak \"Looks like you are" + emotion_str
+                              + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
+                    no_emotion = False
+                if emotion['Type'] == "SAD":
+                    if emotion['Confidence'] > 5:
+                        print("looks like you are sad")
+                        motor.on()
+                        print("turn on motor")
+                        led_green.on()
+                        sleep(10)
+                        led_green.off()
+                        motor.off()
+                        print("turn off motor")
+
+        if no_emotion:
+            os.system(
+                "espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
+    else:
+        os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
+        name_input = input('What is your name? ')
+        uploadSingleImg(stream, name_input)
+        #print(fileName)
+        print(name_input)
+        os.system("espeak \"Hello" + str(name_input)
+                  + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
+
+
+def button2_pressed():
+    print("button 2 pressed")
+
+button_1_press_triggered = False
+
 def main():
     with picamera.PiCamera() as camera:
         camera.resolution = (1024, 768)
@@ -131,59 +191,29 @@ def main():
 
         time.sleep(1)
 
-        while True:  # comment this out if you ar enot using a button
-            button.wait_for_press()  # comment this out if you ar enot using a button
-            print("pressed")
-            led_green.off()
-            led_red.blink()
 
-            take_picture(camera, stream)
-            name = findName(stream)
 
-            if name:
-                response = rekognition.detect_faces(
-                    Image={'Bytes': stream.getvalue()}, Attributes=['ALL'])
-                    # pprint (response)
-                led_red.off()
-                led_green.on()
-                print('Detected faces for ' + str(name))
-                os.system("espeak \"Hello" + str(name) +
-                          "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
-                pprint(response['FaceDetails'][0]['Emotions'])
-                no_emotion = True
-                for faceDetail in response['FaceDetails']:
-                    for emotion in faceDetail['Emotions']:
-                        if emotion['Confidence'] > 50:
-                            emotion_str = str(emotion['Type'])
-                            print("looks like you are," + emotion_str)
-                            os.system("espeak \"Looks like you are" + emotion_str
-                                      + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
-                            no_emotion = False
-                        if emotion['Type'] == "SAD":
-                            if emotion['Confidence'] > 5:
-                                print("looks like you are sad")
-                                motor.on()
-                                print("turn on motor")
-                                led_green.on()
-                                sleep(10)
-                                led_green.off()
-                                motor.off()
-                                print("turn off motor")
-
-                if no_emotion:
-                    os.system(
-                        "espeak \"Hello\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
+        while True:  # comment this out if you
+            if button1.pressed:
+                if not button_1_press_triggered:
+                    print('triggering button 1')
+                    button_1_pressed(camera, stream)
+                    button_1_press_triggered = True
             else:
-                os.system("espeak \"Seems like I don't know you, Can you tell me your name\"  --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
-                name_input = input('What is your name? ')
-                uploadSingleImg(stream, name_input)
-                #print(fileName)
-                print(name_input)
-                os.system("espeak \"Hello" + str(name_input)
-                          + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=30:C0:1B:8D:BF:7F,PROFILE=a2dp")
+                button_1_press_triggered = False
 
-            button.wait_for_release()  # comment this out if you ar enot using a button
-            print("released")
+
+
+            # button.wait_for_press()  # comment this out if you ar enot using a button
+            #
+            # button.wait_for_release()  # comment this out if you ar enot using a button
+            # print("released")
+        # button2.wait_for_press()
+        # print("tear up")
+        # motor.on()
+        # sleep(10)
+        # motor.off()
+        # button2.wait_for_release()
 
 
 if __name__ == "__main__":
