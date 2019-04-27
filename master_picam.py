@@ -159,8 +159,8 @@ def main():
                             os.system("espeak \"Looks like you are" + emotion_str
                                       + "\" --stdout | aplay -D bluealsa:HCI=hci0,DEV=70:99:1C:07:86:EE,PROFILE=a2dp")
                             no_emotion = False
-                        if emotion['Type'] == "CALM":
-                            if emotion['Confidence'] > 10:
+                        if emotion['Type'] == "SAD":
+                            if emotion['Confidence'] > 5:
                                 print("looks like you are sad")
                                 motor.on()
                                 print("turn on motor")
