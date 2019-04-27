@@ -182,6 +182,7 @@ def button2_pressed():
 button_1_press_triggered = False
 
 def main():
+    print('starting program')
     with picamera.PiCamera() as camera:
         camera.resolution = (1024, 768)
         camera.rotation = 90
@@ -194,6 +195,7 @@ def main():
 
 
         while True:  # comment this out if you
+            print("loop")
             if button1.is_held:
                 print("buton 1 held.")
                 if not button_1_press_triggered:
