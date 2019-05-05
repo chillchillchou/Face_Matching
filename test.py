@@ -117,7 +117,7 @@ button2 = Button(24)
 
 def button_1_pressed():
     print("pressed")
-
+    led_green.off()
     led_red.blink()
     sleep(10)
     led_red.off()
