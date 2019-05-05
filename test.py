@@ -141,7 +141,7 @@ def main():
         if button1.value == 1:
             if not button_1_press_triggered:
                 print('triggering button 1')
-                button_1_pressed(camera, stream)
+                button_1_pressed()
                 button_1_press_triggered = True
         else:
             button_1_press_triggered = False
