@@ -115,7 +115,7 @@ button2 = Button(24)
 #
 
 
-def button_1_pressed(camera, stream):
+def button_1_pressed():
     print("pressed")
 
     led_red.blink()
