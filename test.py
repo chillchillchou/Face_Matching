@@ -10,8 +10,8 @@ import picamera
 from gpiozero import LED, Button,OutputDevice
 from time import sleep
 motor = OutputDevice(18)
-led_red = LED(4)
-led_green = LED(25)
+led_red = LED(25)
+led_green = LED(4)
 
 def do_something_when_pressed():
     print("button pressed")
