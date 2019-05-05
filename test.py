@@ -13,14 +13,6 @@ motor = OutputDevice(18)
 led_red = LED(4)
 led_green = LED(25)
 
-# connect to aws rekognition
-BUCKET = 'itpface'
-COLLECTION_ID = 'itpFaces'
-s3 = boto3.resource('s3')
-client = boto3.client('rekognition')
-rekognition = boto3.client('rekognition', region_name='us-east-1')
-
-
 def do_something_when_pressed():
     print("button pressed")
 
@@ -162,7 +154,7 @@ def main():
         else:
             button_2_press_triggered = False
 
-    
+
 
 
             # button.wait_for_press()  # comment this out if you ar enot using a button
