@@ -46,7 +46,7 @@ $ python master_picam.py
 ```
 With a webcam:
 ```
-$ python master_cv_webcam.py<br/>
+$ python master_cv_webcam.py
 ```
 
 To see all the faces in the collection:
